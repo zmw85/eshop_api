@@ -1,0 +1,28 @@
+{
+  "name": "eshop_api",
+  "version": "1.0.0",
+  "description": "main api for eshop",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "mongod-fork": "mongod --fork --logpath /var/log/mongodb.log",
+    "mongod-shutdown": "mongo admin --eval \"db.shutdownServer()\"",
+    "start": "node server/server.js"
+  },
+  "author": "Zhengmin Wang",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "express-jwt": "^5.1.0",
+    "jsonwebtoken": "^7.3.0",
+    "moment": "^2.18.1",
+    "mongoose": "^4.9.4"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-express-server": "^0.5.3",
+    "grunt-shell": "^2.1.0"
+  }
+}
