@@ -18,3 +18,5 @@ gulp.task('start', () => {
     , env: { 'NODE_ENV': 'dev' }
   });
 });
+
+gulp.task('default', ['start']);

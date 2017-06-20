@@ -1,6 +1,6 @@
 /* jshint indent: 2 */
 
-var uuidV4 = require('uuid/v4');
+const uuidV4 = require('uuid/v4');
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('refreshTokens', {
@@ -42,6 +42,21 @@ module.exports = function(sequelize, DataTypes) {
       field: 'UserId'
     }
   }, {
-    tableName: 'RefreshTokens'
+    tableName: 'RefreshTokens', 
+    classMethods: {
+      findValidOneByClientIdToken: function(clientId, token) {
+        return this.findOne({
+          attributes: ['token', 'clientId', 'createdAt', 'userId'],
+          where: { token: token, clientId: clientId, expireAt: { $gt: sequelize.fn('UTC_TIMESTAMP') }, revoked: 0 }
+        });
+      },
+      expireRefreshToken: function(clientId, token) {
+        return this.update({
+          expireAt: sequelize.fn('UTC_TIMESTAMP')
+        }, {
+          where: { token: token, clientId: clientId, expireAt: { $gt: sequelize.fn('UTC_TIMESTAMP') }, revoked: 0 }
+        })
+      }
+    }
   });
 };

@@ -1,10 +1,17 @@
 module.exports = app => {
-  app.use(require('../auth'));
 
+  // authentication
+  app.use('/auth', require('./auth'));
+
+  // resources
+  app.use('/api', require('./api'));
+
+  // 404
   app.use('/*', (req, res, next) => {
     return res
       .status(404)
-      .json({status: 404, data: 'The requested resource could not be found.'});
+      .json({status: 404, data: 'The requested resource could not be found.'})
+      .end();
   });
 
   // error handling

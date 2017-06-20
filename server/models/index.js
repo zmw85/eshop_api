@@ -3,7 +3,7 @@
 var fs            = require("fs");
 var path          = require("path");
 var Sequelize     = require("sequelize");
-var env           = process.env.NODE_ENV || "development";
+var env           = process.env.NODE_ENV || "dev";
 var config        = require('../config');
 var mysqlCconfig  = config.db.mysql;
 
@@ -13,7 +13,8 @@ var sequelize = new Sequelize(mysqlCconfig.database, mysqlCconfig.username, mysq
   port: mysqlCconfig.port,
   define: {
     timestamps: false
-  }
+  },
+  logging: env === 'dev'
 });
 
 var db = {};

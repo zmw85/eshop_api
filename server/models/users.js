@@ -1,6 +1,5 @@
 /* jshint indent: 2 */
 
-
 var uuidV4 = require('uuid/v4');
 
 module.exports = function(sequelize, DataTypes) {
