@@ -1,0 +1,21 @@
+{
+  "apps": [{
+    "name": "eshop-api",
+    "script": "./server/server.js",
+    "exec_mode": "fork",
+    "instances": 1,
+    "watch": true,
+    "ignore_watch": [
+      "node_modules",
+      "*.json",
+      ".vscode",
+      ".git"
+    ],
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "env_production": {
+      "NODE_ENV": "production"
+    }
+  }]
+}

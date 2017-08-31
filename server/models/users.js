@@ -1,6 +1,9 @@
 /* jshint indent: 2 */
 
-var uuidV4 = require('uuid/v4');
+const uuidV4 = require('uuid/v4'),
+  reqHelper = require('../utilities/requestHelper'),
+  stdAttributes = ['id', 'firstName', 'lastName', 'email', 'userName', 'sex', 'status', 'emailVerified', 'phone', 'mobile', 
+    'createdAt', 'updatedAt'];
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('users', {
@@ -108,9 +111,28 @@ module.exports = function(sequelize, DataTypes) {
     tableName: 'Users',
     classMethods: {
 
-      findOneByUserNamePassword: function(username, password) {
+      findUsers: function(params = {}) {
+
+        params.offset = params.offset || 0;
+        params.limit = reqHelper.setLimit(params.limit);
+        params.attributes = reqHelper.filterAttributes(stdAttributes, params.attributes);
+        
+        return this.findAll({
+          attributes: params.attributes,
+          where: {
+            deleted: 0
+          },
+          offset: params.offset,
+          limit: params.limit
+        })
+      },
+
+      findOneByUserNamePassword: function(username, password, attributes = []) {
+
+        attributes = reqHelper.filterAttributes(stdAttributes, attributes);
+
         return this.findOne({
-          attributes: ['id', 'firstName', 'lastName', 'email', 'userName', 'sex', 'status', 'emailVerified', 'phone', 'mobile', 'createdAt', 'updatedAt'],
+          attributes: attributes,
           where: {
             username: username,
             password: password,

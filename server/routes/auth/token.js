@@ -28,9 +28,9 @@ router.post('', (req, res, next) => {
   }).catch(err => {
     if (err instanceof Error) {
       console.log(err);
-      res.status(500).send({status: 500, error: 'Service internal error'}).end();
+      return res.sendError(500, 'Service internal error');
     } else {
-      res.status(err.status).send(err).end();
+      return res.sendError(err.status, err.errors);
     }
   });
 });
@@ -38,13 +38,13 @@ router.post('', (req, res, next) => {
 const validateGrantType = (grantType) => {
   return new Promise((resolve, reject) => {
     if (!grantType) {
-      reject({status: 400, error: 'Missing grant type'});
+      reject({status: 400, errors: ['Missing grant type']});
     }
     
     grantType = grantType.trim().toLowerCase();
 
     if (GRANT_TYPES.indexOf(grantType) < 0) {
-      reject({status: 400, error: 'Invalid grant type'});
+      reject({status: 400, errors: ['Invalid grant type']});
     }
 
     resolve();
@@ -55,7 +55,7 @@ const grantByClientCredentials = (grantType, client_id, client_secret) => {
   const p = new Promise((resolve, reject) => {
     if (!client_id || !client_secret) {
       var missing = !client_id ? 'id' : 'secret';
-      reject({status: 400, error: `Missing client_${missing}`});
+      reject({status: 400, errors: [`Missing client_${missing}`]});
     }
     resolve();
   });
@@ -64,7 +64,7 @@ const grantByClientCredentials = (grantType, client_id, client_secret) => {
     return $seq.clients.findOneByKeySecret(client_id, client_secret);
   }).then(result => {
     if (!result) {
-      throw {status: 400, error: 'Invalid client credentials'};
+      throw {status: 400, errors: ['Invalid client credentials']};
     }
     
     client = result.dataValues;
@@ -92,13 +92,14 @@ const grantByClientCredentials = (grantType, client_id, client_secret) => {
       response.expire = moment.utc().add(client.tokenLength, 'm');
       var ttl = client.tokenLength * 60;
 
+      response.roles = roles;
+
       if (refreshToken) {
         response.refreshToken = {
           token: refreshToken.token,
           expire: refreshToken.expireAt
         };
       }
-      response.roles = roles;
     }
 
     return response;
@@ -115,20 +116,20 @@ const grantByPassword = (grantType, prevResult, username, password) => {
   return new Promise((resolve, reject) => {
     if (!username || !password) {
       var missing = !username ? 'username' : 'password';
-      reject({status: 400, error: `Missing ${missing}`});
+      reject({status: 400, errors: [`Missing ${missing}`]});
     }
     resolve();
   }).then(() => {
     return $seq.users.findOneByUserNamePassword(username, password);
   }).then((result) => {
     if (!result) {
-      throw {status: 400, error: 'Invalid user name or password'};
+      throw {status: 400, errors: ['Invalid user name or password']};
     }
 
     var user = result.dataValues;
     
     if (user.status != 'active') {
-      throw {status: 400, error: 'Your user account is inactive'};
+      throw {status: 400, errors: ['Your user account is inactive']};
     }
     
     let roles = ['user', 'client'];
@@ -141,6 +142,7 @@ const grantByPassword = (grantType, prevResult, username, password) => {
     prevResult.token = token;
     prevResult.expire = moment.utc().add(client.userTokenLength, 'm');
     prevResult.userId = user.id;
+    //roles.push('xxx');
     prevResult.roles = roles;
 
     if (client.userRefreshToken) {
@@ -171,14 +173,14 @@ const grantByRefreshToken = (grantType, prevResult, refreshToken) => {
 
   return new Promise((resolve, reject) => {
     if (!refreshToken) {
-      reject({status: 400, error: 'Missing refresh_token'});
+      reject({status: 400, errors: ['Missing refresh_token']});
     }
     resolve();
   }).then(() => {
     return $seq.refreshTokens.findValidOneByClientIdToken(client.id, refreshToken);
   }).then((result) => {
     if (!result) {
-      throw {status: 400, error: 'Invalid refresh token'};
+      throw {status: 400, errors: ['Invalid refresh token']};
     }
 
     let refreshTokenRecord = result.dataValues;

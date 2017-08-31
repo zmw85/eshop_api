@@ -42,13 +42,23 @@ var config = {
       galleryThumbHeight: 150
     }
   },
-  versions: {
-    css: "201703111200",
-    js: "201703111200"
+  appSettings: {
+    defaultLimit: 50,
+    maxLimit: 500,
+    environment: 'development'
+  },
+  environments: {
+    dev: 'development',
+    prod: 'production',
+    test: 'test'
   }
 };
 
-var betaConfig = {}
+var betaConfig = {
+  appSettings: {
+    environment: 'productioin'
+  }
+}
 
 var prodConfig = {
   db: {
@@ -65,6 +75,9 @@ var prodConfig = {
     imageServer: {
       domain: "http://ecommerce.prod.s3-website-us-west-2.amazonaws.com"
     }
+  },
+  appSettings: {
+    environment: 'productioin'
   }
 }
 

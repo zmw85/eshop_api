@@ -1,9 +1,12 @@
-var express = require('express'),
-  router = express.Router();
+let express = require('express'),
+  router = express.Router(),
+  config = require('../../config');
 
 // api resource authorisation middleware
 router.use('', (req, res, next) => {
-  console.log(req.token);
+  if (req.env === config.environments.dev) {
+    console.log(req.token);
+  }  
   next();
 });
 

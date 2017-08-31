@@ -1,4 +1,13 @@
+let resFuncs = require('../utilities/responseFunctions');
+
 module.exports = app => {
+
+  // assign respponse function
+  app.use('', (req, res, next) => {
+    let sendErrorBound = resFuncs.sendError.bind(res);
+    res.sendError = sendErrorBound;
+    next();
+  });
 
   // authentication
   app.use('/auth', require('./auth'));

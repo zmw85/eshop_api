@@ -3,20 +3,34 @@ let express = require('express')
   , bodyParser = require('body-parser')
   , expressJWT = require('express-jwt')
   , config = require('./config')
-  , logger = require('morgan');
+  , logger = require('morgan')
+  , expressValidator = require('express-validator');
 
-if (process.env.NODE_ENV === 'dev') {
+app.use(function(req, res, next) {
+  // set environment
+  let env = config.environments.dev;
+
+  if (process.env.NODE_ENV) {
+    let env = process.env.NODE_ENV.trim().toLowerCase();
+    app.env = req.env = ['development','production','test'].indexOf(env) > -1 ? env : config.environments.dev;
+  }
+  next();
+});
+
+if (app.env === config.environments.dev) {
   app.use(logger('dev'));
 }
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(expressValidator({
+  customValidators: require('./utilities/customValidators')
+}));
 
 app.use(expressJWT({secret: config.auth.token.secret, requestProperty: 'token'})
   .unless({path: ['/auth/token']}));
 
 require('./routes')(app);
-
 
 // error handlers catch 404 and forward to error handler
 app.use(function (req, res, next) {
