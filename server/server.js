@@ -14,6 +14,7 @@ app.use(function(req, res, next) {
     let env = process.env.NODE_ENV.trim().toLowerCase();
     app.env = req.env = ['development','production','test'].indexOf(env) > -1 ? env : config.environments.dev;
   }
+  
   next();
 });
 

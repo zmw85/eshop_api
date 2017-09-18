@@ -10,11 +10,11 @@ var config = {
   },
   db: {
     mysql: {
-      host: "localhost",
+      host: "mysql-eshop.ckzoxzsvcc8g.ap-southeast-2.rds.amazonaws.com",
       database: "eshop",
       port: 3306,
       username: "root",
-      password: "901166",
+      password: "5287895w",
       pollSize: 3,
       timeout: {
         short: 10000, // 10 seconds

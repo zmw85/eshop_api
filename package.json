@@ -2,13 +2,25 @@
   "name": "eshop_api",
   "version": "1.0.0",
   "description": "eshop api",
+  "config": {
+    "s3BucketName": "aws-serverless-lambda",
+    "region": "ap-southeast-2",
+    "cloudFormationStackName": "AwsServerlessExpressStack",
+    "functionName": "awsServerlessLambdaExample",
+    "accountId": "204142071523"
+  },
   "scripts": {
     "test": "mocha ./test/auth/token",
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "create-bucket": "aws s3 mb s3://$npm_package_config_s3BucketName --region $npm_package_config_region",
+    "delete-bucket": "aws s3 rb s3://$npm_package_config_s3BucketName --region $npm_package_config_region",
+    "package": "aws cloudformation package --template ./cloudformation.yaml --s3-bucket $npm_package_config_s3BucketName --output-template packaged-sam.yaml --region $npm_package_config_region",
+    "deploy": "aws cloudformation deploy --template-file packaged-sam.yaml --stack-name $npm_package_config_cloudFormationStackName --capabilities CAPABILITY_IAM --region $npm_package_config_region"
   },
   "author": "Zhengmin Wang",
   "license": "ISC",
   "dependencies": {
+    "aws-serverless-express": "^3.0.2",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",

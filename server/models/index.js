@@ -5,12 +5,12 @@ var path          = require("path");
 var Sequelize     = require("sequelize");
 var env           = process.env.NODE_ENV || "dev";
 var config        = require('../config');
-var mysqlCconfig  = config.db.mysql;
+var mysqlConfig  = config.db.mysql;
 
-var sequelize = new Sequelize(mysqlCconfig.database, mysqlCconfig.username, mysqlCconfig.password, {
+var sequelize = new Sequelize(mysqlConfig.database, mysqlConfig.username, mysqlConfig.password, {
   dialect: 'mysql',
-  host: mysqlCconfig.host,
-  port: mysqlCconfig.port,
+  host: mysqlConfig.host,
+  port: mysqlConfig.port,
   define: {
     timestamps: false
   },
