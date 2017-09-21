@@ -5,6 +5,7 @@ let express = require('express')
   , config = require('./config')
   , logger = require('morgan')
   , expressValidator = require('express-validator');
+const path = require('path');
 
 app.use(function(req, res, next) {
   // set environment
@@ -22,6 +23,9 @@ if (app.env === config.environments.dev) {
   app.use(logger('dev'));
 }
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(expressValidator({
@@ -29,7 +33,7 @@ app.use(expressValidator({
 }));
 
 app.use(expressJWT({secret: config.auth.token.secret, requestProperty: 'token'})
-  .unless({path: ['/auth/token']}));
+  .unless({path: ['/auth/token', '/']}));
 
 require('./routes')(app);
 

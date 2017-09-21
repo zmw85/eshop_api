@@ -1,15 +1,15 @@
 process.env.NODE_ENV = 'test';
 
 //Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../../server/server');
-let should = chai.should();
-let expect = chai.expect;
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const server = require('../../server/server');
+const should = chai.should();
+const expect = chai.expect;
 
 chai.use(chaiHttp);
 
-let validateResponse_clientCredentials_withRefreshToken = (err, res) => {
+const validateResponse_clientCredentials_withRefreshToken = (err, res) => {
   res.should.have.status(200);
   res.body.should.be.a('object').that.have.property('token').that.be.a('string');
   res.body.should.have.property('expire').that.be.a('string');
@@ -20,14 +20,14 @@ let validateResponse_clientCredentials_withRefreshToken = (err, res) => {
     .that.have.property('token').that.be.a('string');
   res.body.refreshToken.should.have.property('expire').that.be.a('string');
 };
-let validateResponse_clientCredentials_withoutRefreshToken = (err, res) => {
+const validateResponse_clientCredentials_withoutRefreshToken = (err, res) => {
   res.should.have.status(200);
   res.body.should.be.a('object').that.have.property('token').that.be.a('string');
   res.body.should.have.property('expire').that.be.a('string');
   res.body.should.have.property('issuer').that.be.a('string');
   res.body.should.have.property('roles').that.be.a('array').that.have.members(['client']);
 };
-let validateResponse_password_withRefreshToken = (err, res) => {
+const validateResponse_password_withRefreshToken = (err, res) => {
   res.should.have.status(200);
   res.body.should.be.a('object').that.have.property('token').that.be.a('string');
   res.body.should.have.property('expire').that.be.a('string');
@@ -38,7 +38,7 @@ let validateResponse_password_withRefreshToken = (err, res) => {
     .that.have.property('token').that.be.a('string');
   res.body.refreshToken.should.have.property('expire').that.be.a('string');
 };
-let validateResponse_password_withoutRefreshToken = (err, res) => {
+const validateResponse_password_withoutRefreshToken = (err, res) => {
   res.should.have.status(200);
   res.body.should.be.a('object').that.have.property('token').that.be.a('string');
   res.body.should.have.property('expire').that.be.a('string');
@@ -46,8 +46,8 @@ let validateResponse_password_withoutRefreshToken = (err, res) => {
   res.body.should.have.property('roles').that.be.a('array').that.have.members(['client','user']);
 };
 
-describe('Authentication: Token', () => {
-  let clientId_1 = 'system_admin'
+describe('/auth/token:', () => {
+  const clientId_1 = 'system_admin'
     , clientSecret_1 = '31024eac281b11e785bf3f395f33dfc9'
     , clientId_2 = 'system_admin2'
     , clientSecret_2 = '51fcd216541811e7a156211c297bee38'
@@ -56,7 +56,7 @@ describe('Authentication: Token', () => {
   let refreshToken;
 
   // client_credenttials
-  describe('/auth/token (grant_type: client_credentials)', () => {
+  describe('POST: (grant_type: client_credentials)', () => {
     it('with refresh token: it should return json web token with refresh token', (done) => {
       chai.request(server)
         .post('/auth/token')
@@ -86,7 +86,7 @@ describe('Authentication: Token', () => {
     });
   });
 
-  describe('/auth/token (grant_type: refresh_token), for client_credentials', () => {
+  describe('POST: (grant_type: refresh_token), for client_credentials', () => {
     it('it should return json web token weith a renewed refresh token', (done) => {
       chai.request(server)
         .post('/auth/token')
@@ -105,7 +105,7 @@ describe('Authentication: Token', () => {
   });
 
   // password
-  describe('/auth/token (grant_type: password)', () => {
+  describe('POST: (grant_type: password)', () => {
     it('with refresh token: it should return json web token with refresh token', (done) => {
       chai.request(server)
         .post('/auth/token')
@@ -139,7 +139,7 @@ describe('Authentication: Token', () => {
     });
   });
 
-  describe('/auth/token (grant_type: refresh_token), for password', () => {
+  describe('POST: (grant_type: refresh_token), for password', () => {
     it('it should return json web token weith a renewed refresh token', (done) => {
       chai.request(server)
         .post('/auth/token')

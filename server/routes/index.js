@@ -1,4 +1,4 @@
-let resFuncs = require('../utilities/responseFunctions');
+const resFuncs = require('../utilities/responseFunctions');
 
 module.exports = app => {
 
@@ -14,6 +14,10 @@ module.exports = app => {
 
   // resources
   app.use('/api', require('./api'));
+
+  app.route('/').get((req, res) => {
+    res.render('index');
+  })
 
   // 404
   app.use('/*', (req, res, next) => {

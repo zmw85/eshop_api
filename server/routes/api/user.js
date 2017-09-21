@@ -1,4 +1,4 @@
-var express = require('express'),
+let express = require('express'),
   router = express.Router(),
   userControllers = require('../../controllers/user');
 
