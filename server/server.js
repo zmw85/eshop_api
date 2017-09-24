@@ -6,15 +6,20 @@ let express = require('express')
   , logger = require('morgan')
   , expressValidator = require('express-validator');
 const path = require('path');
+// const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');  
 
 app.use(function(req, res, next) {
   // set environment
-  let env = config.environments.dev;
+  // let env = config.environments.dev;
 
   if (process.env.NODE_ENV) {
     let env = process.env.NODE_ENV.trim().toLowerCase();
     app.env = req.env = ['development','production','test'].indexOf(env) > -1 ? env : config.environments.dev;
   }
+
+  // if (req.apiGateway) {
+  //   res.json(req.apiGateway);
+  // }
   
   next();
 });
@@ -47,7 +52,7 @@ app.use(function (req, res, next) {
 // development error handler will print stacktrace
 if (app.get('env') !== 'prod') {
   app
-    .use(function (err, req, res, next) {
+    .use(function (err, req, res) {
       res.status(err.status || 500);
       res.render('error', {
         message: err.message,
@@ -58,7 +63,7 @@ if (app.get('env') !== 'prod') {
 
 // production error handler no stacktraces leaked to user
 app
-  .use(function (err, req, res, next) {
+  .use(function (err, req, res) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,

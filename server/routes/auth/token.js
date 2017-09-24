@@ -89,7 +89,7 @@ const grantByClientCredentials = (grantType, client_id, client_secret) => {
       );
 
       response.token = token;
-      response.expire = moment.utc().add(client.tokenLength, 'm');
+      response.expire = moment.utc().add(client.tokenLength, "m");
       var ttl = client.tokenLength * 60;
 
       response.roles = roles;
