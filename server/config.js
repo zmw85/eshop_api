@@ -10,7 +10,8 @@ var config = {
   },
   db: {
     mysql: {
-      host: "mysql-eshop.ckzoxzsvcc8g.ap-southeast-2.rds.amazonaws.com",
+      // host: "mysql-eshop.ckzoxzsvcc8g.ap-southeast-2.rds.amazonaws.com",
+      host: "localhost",
       database: "eshop",
       port: 3306,
       username: "root",
@@ -55,8 +56,13 @@ var config = {
 };
 
 var betaConfig = {
+  db: {
+    mysql: {
+      host: "mysql-eshop.ckzoxzsvcc8g.ap-southeast-2.rds.amazonaws.com"
+    }
+  },
   appSettings: {
-    environment: 'productioin'
+    environment: 'production'
   }
 }
 
@@ -77,13 +83,13 @@ var prodConfig = {
     }
   },
   appSettings: {
-    environment: 'productioin'
+    environment: 'production'
   }
 }
 
-if (process.env.NODE_ENV == "beta") {
+if (process.env.NODE_ENV === "beta") {
   config = Object.assign(config, betaConfig);
-} else if (process.env.NODE_ENV == "prod") {
+} else if (process.env.NODE_ENV === "prod") {
   config = Object.assign(config, prodConfig);
 }
 

@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "gulp",
-    "dev:docker": "docker run --name node -p 3000:3000 -v ~/projects/eshop/api:/app/eshop/api -w /app/eshop/api --rm node:6-alpine npm run dev",
+    "dev:docker": "docker run -d --name eshop-api-dev -p 3000:3000 -v ~/projects/eshop/api:/app/eshop/api -w /app/eshop/api --rm node:6-alpine npm run dev",
     "test": "mocha ./test",
     "start": "node server/server.js",
     "lambda-scale": "aws lambda update-function-configuration --function-name $npm_package_config_lambdaFunctionName --memory-size $1",
